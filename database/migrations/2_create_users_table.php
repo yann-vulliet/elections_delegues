@@ -19,13 +19,14 @@ return new class extends Migration
             $table->string('address');
             $table->string('zipCode');
             $table->string('city');
-            $table->string('avatar');
+            $table->string('avatar')->default('no-avatar.png');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
 
+            $table->integer('registeredElection')->default(0);
             $table->timestamp('vote1')->nullable();
             $table->timestamp('vote2')->nullable();
             $table->integer('result1')->default(0);

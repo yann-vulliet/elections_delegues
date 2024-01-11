@@ -1,0 +1,22 @@
+// Body
+$body-bg: #f8fafc;
+
+// Typography
+$font-family-sans-serif: 'Nunito', sans-serif;
+$font-size-base: 0.9rem;
+$line-height-base: 1.6;
+
+.center {
+    margin: 0 auto;
+    text-align: center;
+}
+
+.left {
+    margin: 0 auto 0 0;
+    text-align: left;
+}
+
+.right {
+    margin: 0 0 0 auto;
+    text-align: right;
+}

@@ -1,0 +1,28 @@
+// Correction BootStrap
+
+.dropdown-toggle::after {
+    font-size: 0;
+}
+
+.dropdown-menu {
+    --bs-dropdown-min-width: 30rem;
+}
+
+// Style
+
+.logo {
+    width: 280px;
+}
+
+.max-content {
+    width: max-content;
+}
+
+.btn-admin {
+    display: flex;
+}
+
+.btn-admin>* {
+    height: fit-content;
+    margin: 5px;
+}

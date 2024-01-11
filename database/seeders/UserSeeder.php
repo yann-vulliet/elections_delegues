@@ -23,6 +23,7 @@ class UserSeeder extends Seeder
             'city' => 'Nantes',
             'avatar' => 'no-avatar.png',
             'email' => 'arinfo@mail.com',
+            'role_id' => 1,
             'password' => Hash::make('Arinfo2023$')
         ]);
 
@@ -35,6 +36,7 @@ class UserSeeder extends Seeder
             'city' => 'Nantes',
             'avatar' => 'no-avatar.png',
             'email' => 'toto@mail.com',
+            'role_id' => 2,
             'password' => Hash::make('Arinfo2023$')
         ]);
 
