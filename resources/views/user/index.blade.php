@@ -26,7 +26,9 @@
                                     <div class="mb-3">
                                         <select name="role_id" id="">
                                             @foreach ($roles as $role)
+                                            @if(Auth::user()->role_id <= $role->id)
                                                 <option value="{{$role->id}}" @if($user->role_id == $role->id) selected @endif>{{$role->role}}</option>
+                                            @endif
                                             @endforeach
                                         </select>
                                     </div>
@@ -63,7 +65,8 @@
                                 @else
                                     <div class="btn btn-primary">Choisir un role</div>
                                 @endif
-                            </a>
+                            </a> 
+                            @if($user->role_id > 2 or Auth::user()->role_id == 1)
                             <div class="dropdown-menu dropdown-menu-start mb-1 row mb-1">
                                 <form class="" action="{{route('users.update', $user)}}" method="POST">
                                     @csrf
@@ -71,13 +74,16 @@
                                     <div class="mb-3">
                                         <select name="role_id" id="">
                                             @foreach ($roles as $role)
+                                            @if(Auth::user()->role_id <= $role->id)
                                                 <option value="{{$role->id}}" @if($user->role_id == $role->id) selected @endif>{{$role->role}}</option>
+                                            @endif
                                             @endforeach
                                         </select>
                                     </div>
                                     <button type="submit" class="btn btn-primary">Modifier</button>
                                 </form>
                             </div>
+                            @endif
                     </div>
                     
                     <div class="btn-admin right">

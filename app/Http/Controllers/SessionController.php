@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Role;
+use App\Models\User;
 use App\Models\Session;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -25,7 +27,7 @@ class SessionController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(Session $session)
+    public function create()
     {
         //
     }
@@ -34,8 +36,38 @@ class SessionController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-    {
-        //
+    {        
+        if (Auth::user()->role_id <= 2) {
+
+            $userId = $request->input('userId', []);
+            foreach ($userId as $id) {
+                $user = User::find($id);
+                $user->registeredElection = 1;
+                $user->save();
+            }
+
+            $request->validate([
+                'role' => 'required'
+            ]);
+
+            $vote1 = $request->input('vote1');
+            $vote2 = $request->input('vote2');
+            $role = $request->input('role');
+
+            $session = new Session;
+
+            $vote1 = strtotime('1970-01-01 '.$vote1.':00') + strtotime(now());
+            $vote1 = date('Y-m-d H:i:s', $vote1);
+
+            $session->vote1 = $vote1;
+            $session->role_id = $role;
+
+            $session->save();
+
+            return redirect()->back()->with('message', 'Session d\'élection créé');
+        } else {
+            return redirect()->back('index')->withErrors('erreur', 'Vous n\'avez pas les droits administrateurs');
+        }
     }
 
     /**
@@ -57,9 +89,54 @@ class SessionController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Session $session)
     {
-        //
+        
+        if (Auth::user()->role_id <= 2) {
+            $userId = $request->input('userId', []);
+            foreach ($userId as $id) {
+                $user = User::find($id);
+                $user->registeredElection = 1;
+                $user->save();
+            }
+
+            $winner = $request->input('winner');
+            $vote1 = $request->input('vote1');
+            $vote2 = $request->input('vote2');
+            $role = $request->input('role');
+
+            $vote1 = strtotime('1970-01-01 '.$vote1.':00') + strtotime(now());
+            $vote1 = date('Y-m-d H:i:s', $vote1);
+            $vote2 = strtotime('1970-01-01 '.$vote2.':00') + strtotime(now());
+            $vote2 = date('Y-m-d H:i:s', $vote2);
+
+            if ($vote1 and $vote1 > now()){
+                $session->vote1 = $vote1;
+            }elseif ($vote2 and $vote2 > now()){
+                $session->vote2 = $vote2;
+            }else{
+                if (isset($winner)){
+                    $user = User::where('result1', '!=', 0)
+                    ->orderBy('result1', 'desc')
+                    ->take(1)
+                    ->get();
+                    $user[0]->result2 = intval($winner);
+                    $session->vote2 = now();
+                    $user->save();
+                    $session->save();
+                }else{
+                    return redirect()->back('index')->withErrors('erreur', 'Veuillez entrer un temps');
+                }
+            }
+
+            $session->role_id = $role;
+
+            $session->save();
+
+            return redirect()->back()->with('message', 'Session d\'élection modifié');
+        } else {
+            return redirect()->back('index')->withErrors('erreur', 'Vous n\'avez pas les droits administrateurs');
+        }
     }
 
     /**

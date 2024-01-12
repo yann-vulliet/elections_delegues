@@ -16,7 +16,7 @@ class UserController extends Controller
     public function index()
     {
         if (Auth::user()->role_id <= 2) {
-            $roles = Role::all();
+            $roles = Role::orderBy('id', 'desc')->get();
             $users = User::orderBy('role_id', 'desc')->get();
             return view('user/index', compact('users', 'roles'));
         } else {

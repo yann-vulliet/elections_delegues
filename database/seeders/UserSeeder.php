@@ -40,6 +40,6 @@ class UserSeeder extends Seeder
             'password' => Hash::make('Arinfo2023$')
         ]);
 
-        User::factory(8)->create();
+        User::factory(18)->create();
     }
 }
