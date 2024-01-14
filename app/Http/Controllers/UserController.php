@@ -15,7 +15,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        if (Auth::user()->role_id <= 2) {
+        if (Auth::user() and Auth::user()->role_id <= 2) {
             $roles = Role::orderBy('id', 'desc')->get();
             $users = User::orderBy('role_id', 'desc')->get();
             return view('user/index', compact('users', 'roles'));
@@ -45,10 +45,10 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        if (Auth::user()->id == $user->id or Auth::user()->role_id <= 2) {
+        if (Auth::user() and (Auth::user()->id == $user->id or Auth::user()->role_id <= 2)) {
             return view('user/show', ['user' => $user]);
         } else {
-            return redirect()->back()->withErrors('erreur', 'Vous n\'avez pas les droits administrateurs');
+            return redirect()->back()->withErrors('erreur', 'Vous n\'avez pas les droits');
         }
     }
 
@@ -66,10 +66,25 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
 
-        if($request->role_id){
+        if($request->role_id){ //Changement de role sur la page Compte
             $user->role_id = $request->input('role_id');
-        }else{
-
+        }else if (!$request->vote1 and !$request->vote2){ //Vote blanc pour le 1er tour
+            $user->vote1 = now();
+        }else if (!$request->vote2){ //Vote blanc pour le 2ème tour
+            $user->vote2 = now();
+        }else if ($request->vote1) { //Vote pour le 1er tour
+            $oneVote = User::where('id', '=', $request->vote1)->get();
+            $result = $oneVote[0]->result1 + 1;
+            $oneVote[0]->result1 = $result;
+            $oneVote[0]->save();
+            $user->vote1 = now();
+        }else if ($request->vote2) { //Vote pour le 2ème tour
+            $oneVote = User::where('id', '=', $request->vote2)->get();
+            $result = $oneVote[0]->result2 + 1;
+            $oneVote[0]->result2 = $result;
+            $oneVote[0]->save();
+            $user->vote2 = now();
+        }else{ //Mise à jour depuis la page d'accueil
             $request->validate([
                 'firstName' => 'required|max:100',
                 'lastName' => 'required|max:100',
@@ -77,7 +92,6 @@ class UserController extends Controller
                 'address' => 'required|max:100',
                 'zipCode' => 'required|max:100',
                 'city' => 'required|max:100',
-                'role_id' => 'nullable',
                 'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg'
             ]);
 
@@ -99,13 +113,12 @@ class UserController extends Controller
             $user->address = $request->input('address');
             $user->zipCode = $request->input('zipCode');
             $user->city = $request->input('city');
-            $user->role_id = $request->input('role_id');
             $user->avatar = $filename;
         }
 
         $user->save();
         
-        return redirect()->back()->with('message', 'Le compte a bien été mis à jour.');
+        return redirect()->back()->with('message', 'Validé');
     }
 
     /**
@@ -113,7 +126,7 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        if (Auth::user()->role_id == 1 and Auth::user()->id != $user->id) {
+        if (Auth::user() and Auth::user()->role_id == 1 and Auth::user()->id != $user->id) {
             $user->delete();
             return redirect()->back()->with('message', 'Le compte a été supprimé définitivement.');
         } else {

@@ -31,15 +31,12 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav me-auto">
-                    @if (1 == 1)
+                    @if (Auth::user() and Auth::user()->role_id <= 2)
                         <a class="nav-link" href="{{ route('users.index') }}">
                             Comptes
                         </a>
                         <a class="nav-link" href="{{ route('roles.index') }}">
                             Groupes
-                        </a>
-                        <a class="nav-link" href="{{ route('sessions.index') }}">
-                            Sessions de vote
                         </a>
                     @endif
 

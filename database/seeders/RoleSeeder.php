@@ -24,5 +24,7 @@ class RoleSeeder extends Seeder
         Role::create([
             'role' => 'cda-tc-1123'
         ]);
+
+        Role::factory(2)->create();
     }
 }

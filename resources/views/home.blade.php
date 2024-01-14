@@ -75,6 +75,109 @@
                     </div>
                 </div>
             </div>
+            <div class="card">
+                <div class="">
+                    @foreach ($sessions as $session)
+                        @if (!$sessions->contains('role_id', Auth::user()->role_id)) <!-- Jamais eu de vote pour la session -->
+                        @elseif ($session->role_id == $user->role_id and $session->vote1>now() and !isset($session->vote2) and !isset($user->vote1)) <!-- Vote pour le 1er tour -->
+                            <h2>{{$user->role->role}}</h2>
+                            <div class="center">
+                                <div>
+                                    <form class="" action="{{route('users.update', $user)}}" method="POST">
+                                    @csrf
+                                    @method('PUT')
+                                        <div class="mb-3 d-flex">
+                                            <div class="center">
+                                                        <hr>
+                                                        <div class="d-flex justify-content-between">
+                                                            <input type="radio" id="{{$user->id}}" name="vote1" value="" />
+                                                            <label for="{{$user->id}}">Blanc</label>
+                                                        </div>
+                                                        <hr>
+                                                @foreach ($users as $user)
+                                                    @if ($user->registeredElection == 1)
+                                                        <hr>
+                                                        <div class="d-flex justify-content-between">
+                                                            <input type="radio" id="{{$user->id}}" name="vote1" value="{{$user->id}}" />
+                                                            <label for="{{$user->id}}">{{$user->firstName}} {{$user->lastName}}</label>
+                                                        </div>
+                                                        <hr>
+                                                    @endif
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Valider mon vote</button>
+                                    </form>
+                                </div>
+                            </div>
+                        @elseif ($session->role_id == $user->role_id and $session->vote1>now() and !isset($session->vote2) and isset($user->vote1)) <!-- Fin du 1er tour pour l'utilisateur -->
+                            <h2>{{$user->role->role}}</h2>
+                            <div class="center">
+                                <div>
+                                    <div class="mb-3 d-flex">
+                                        <div class="center">
+                                            En attente du retour administrateur pour la suite de l'élection
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @elseif ($session->role_id == $user->role_id and $session->vote2>now() and !isset($user->vote2)) <!-- Vote pour le 2ème tour -->
+                            <h2>{{$user->role->role}}</h2>
+                            <div class="center">
+                                <div>
+                                    <form class="" action="{{route('users.update', $user)}}" method="POST">
+                                    @csrf
+                                    @method('PUT')
+                                        <div class="mb-3 d-flex">
+                                            <div class="center">
+                                                        <hr>
+                                                        <div class="d-flex justify-content-between">
+                                                            <input type="radio" id="0" name="vote2" value="" />
+                                                            <label for="0">Blanc</label>
+                                                        </div>
+                                                        <hr>
+                                                @foreach ($win1 as $user)
+                                                    @if ($user->registeredElection == 1)
+                                                        <hr>
+                                                        <div class="d-flex justify-content-between">
+                                                            <input type="radio" id="{{$user->id}}" name="vote2" value="{{$user->id}}" />
+                                                            <label for="{{$user->id}}">{{$user->firstName}}{{$user->lastName}}</label>
+                                                        </div>
+                                                        <hr>
+                                                    @endif
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Valider mon vote</button>
+                                    </form>
+                                </div>
+                            </div>
+                        @elseif ($session->role_id == $user->role_id and $session->vote1<now() and $session->vote2>now() and isset($session->vote2)) <!-- Fin du 2ème tour pour l'utilisateur -->
+                            <h2>{{$user->role->role}}</h2>
+                            <div class="center">
+                                <div>
+                                    <div class="mb-3 d-flex">
+                                        <div class="center">
+                                            En attente du retour administrateur pour la suite de l'élection
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @elseif ($session->role_id == $user->role_id and $session->vote2<now()) <!-- Résultat du 2ème tour -->
+                            <h2>{{$user->role->role}}</h2>
+                            <div class="center">
+                                <div>
+                                <div class="mb-3 d-flex">
+                                    <div>
+                                        <h5>Élu : <b> {{$win2->firstName}} {{$win2->LastName}}</b></h5>
+                                        <h6>Suppléant : <b> {{$win2_2->firstName}} {{$win2_2->LastName}}</b></h5>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+                    @endforeach
+                </div>
+            </div>
         </div>
     </div>
 </div>

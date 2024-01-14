@@ -40,6 +40,19 @@ class UserSeeder extends Seeder
             'password' => Hash::make('Arinfo2023$')
         ]);
 
-        User::factory(18)->create();
+        User::create([
+            'lastName' => 'Simple',
+            'firstName' => 'User',
+            'discord' => 'blabla-prof',
+            'address' => '1-5 rue Emile Masson',
+            'zipCode' => '44000',
+            'city' => 'Nantes',
+            'avatar' => 'no-avatar.png',
+            'email' => 'editeur@mail.com',
+            'role_id' => 3,
+            'password' => Hash::make('Arinfo2023$')
+        ]);
+
+        User::factory(17)->create();
     }
 }

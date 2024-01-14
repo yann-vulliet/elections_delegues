@@ -16,7 +16,7 @@ class SessionController extends Controller
      */
     public function index()
     {
-        if (Auth::user()->role_id <= 2) {
+        if (Auth::user() and Auth::user()->role_id <= 2) {
             $sessions = Session::all();
             return view('session/index', compact('sessions'));
         } else {
@@ -37,7 +37,7 @@ class SessionController extends Controller
      */
     public function store(Request $request)
     {        
-        if (Auth::user()->role_id <= 2) {
+        if (Auth::user() and Auth::user()->role_id <= 2) {
 
             $userId = $request->input('userId', []);
             foreach ($userId as $id) {
@@ -92,7 +92,7 @@ class SessionController extends Controller
     public function update(Request $request, Session $session)
     {
         
-        if (Auth::user()->role_id <= 2) {
+        if (Auth::user() and Auth::user()->role_id <= 2) {
             $userId = $request->input('userId', []);
             foreach ($userId as $id) {
                 $user = User::find($id);
@@ -122,8 +122,7 @@ class SessionController extends Controller
                     ->get();
                     $user[0]->result2 = intval($winner);
                     $session->vote2 = now();
-                    $user->save();
-                    $session->save();
+                    $user[0]->save();
                 }else{
                     return redirect()->back('index')->withErrors('erreur', 'Veuillez entrer un temps');
                 }
@@ -144,7 +143,7 @@ class SessionController extends Controller
      */
     public function destroy(User $user)
     {
-        if (Auth::user()->role_id == 1) {
+        if (Auth::user() and Auth::user()->role_id == 1) {
             $user->delete();
             return redirect()->back()->with('message', 'La session de groupe a été supprimé définitivement.');
         } else {

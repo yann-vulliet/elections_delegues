@@ -2,9 +2,10 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Facades\Hash;
+use App\Models\Role;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
@@ -33,6 +34,7 @@ class UserFactory extends Factory
             'address' => fake()->name(),
             'zipCode' => '44123',
             'city' => fake()->name(),
+            'role_id' => rand(3, Role::count()),
             'avatar' => 'no-avatar.png'
         ];
     }

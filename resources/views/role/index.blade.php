@@ -140,6 +140,7 @@ $total = 0;
                                             </div>
                                                 <input type="hidden" id="" name="winner" value="1000" />
                                                 <button type="submit" class="btn btn-primary">Valider le gagnant</button>
+                                                <?php $finish = false; ?>
                                             @else
                                             <div class="d-flex flex-column">
                                                 <div>
@@ -165,7 +166,7 @@ $total = 0;
                                         @method('PUT')
                                         <div class="mb-3 d-flex">
                                             <div>
-                                                <h5>Candidat au 2ème tour :</h5>
+                                                <h5>Résultat du 1er tour :</h5>
                                                 <input type="hidden" id="" name="role" value="{{$role->id}}" />
                                                 @foreach ($win1 as $user)
                                                     @if ($user->role_id == $role->id and $user->registeredElection == 1)
@@ -210,12 +211,34 @@ $total = 0;
                                 <div class="dropdown-menu dropdown-menu-end mb-3 row mb-3">
                                     <div class="mb-3 d-flex">
                                         <div>
-                                            <h5>Élu : </h5>
+                                            @foreach ($win2 as $user)
+                                                @if ($user->role_id == $role->id and $user->registeredElection == 1)
+                                                    <?php $total = $total + $user->result2; ?>
+                                                @endif
+                                            @endforeach
+                                            @foreach ($win2 as $user)
+                                                @if ($user->role_id == $session->role_id)
+                                                    <div>
+                                                        <p>{{$user->firstName}} {{$user->lastName}}
+                                                            <b>
+                                                                <?php 
+                                                                    $pourcentage = number_format($user->result2 / $total * 100, 0);
+                                                                    if ( $pourcentage > 50) {
+                                                                        $finish = true;
+                                                                    }
+                                                                    echo ($pourcentage.'%');
+                                                                ?>
+                                                            </b>
+                                                        </p> 
+                                                    </div>
+                                                @endif
+                                            @endforeach
                                         </div>
                                     </div>
                                 </div> 
-                            @endif
                                 <?php $total = 0; ?>
+                            @endif
+                            <?php $total = 0; ?>
                         @endforeach
                         @endif
                         <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>

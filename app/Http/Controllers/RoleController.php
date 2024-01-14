@@ -16,30 +16,33 @@ class RoleController extends Controller
      */
     public function index()
     {
-        if (Auth::user()->role_id <= 2) {
+        if (Auth::user() and Auth::user()->role_id <= 2) {
             $users = User::orderBy('result1', 'desc')->get();
             $win1 = User::where('result1', '!=', 0)
                 ->orderBy('result1', 'desc')
                 ->get();
-            // if($win1->count()>=2){
-            //     $win1 = $win1[1]->result1;
-            //     $win1 = User::where('result1', $win1)
-            //     ->get();
-            //     $win1first = User::where('result1', '!=', 0)
-            //     ->orderBy('result1', 'desc')
-            //     ->take(1)
-            //     ->get();
-            //     $win1 = $win1->merge($win1first);
-            // }
+                
+
             $win2 = User::where('result2', '!=', 0)
+                ->where('role_id', '!=', 0)
                 ->orderBy('result2', 'desc')
                 ->get();
-            if (count($win2) == 0 or $win2[0]->result2 == $win2[1]->result2){
-                $win2 = 'Aucun gagnant, relancer le 2ème tour';
-            }else if (count($win2) != 0){
-                $win2 = $win2[0];
-            }else{
-            }
+
+            // $win2_2 = '';
+            
+            // if (count($win2) == 1){ // Gagnant dès le 1er tour
+            //     $win2 = $win2[0];
+            //     $win2_2 = $win1[1];
+            // }else if (count($win2) == 0 or $win2[0]->result2 == $win2[1]->result2){ // Égalité au 2ème tour
+            //     $win2 = 'Aucun gagnant, relancer le 2ème tour';
+            // }else if (count($win2) >= 2){ // Gagnant au 2ème tour
+            //     $win2_2 = $win2[1];
+            //     $win2 = $win2[0];
+            // }else if (count($win2) != 0){ // Gagnant au 2ème tour sans suppléant
+            //     $win2 = $win2[0];
+            //     $win2_2 = $win2[1];
+            // }else{
+            // }
             
 
             $sessions = Session::all();
@@ -63,7 +66,7 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
-        if (Auth::user()->role_id <= 2) {
+        if (Auth::user() and Auth::user()->role_id <= 2) {
             $request->validate([
                 'role' => 'required'
             ]);
@@ -109,7 +112,7 @@ class RoleController extends Controller
      */
     public function destroy(Role $role)
     {
-        if (Auth::user()->role_id == 1) {
+        if (Auth::user() and Auth::user()->role_id == 1) {
             $role->delete();
             return redirect()->back()->with('message', 'Le role a été supprimé définitivement.');
         } else {
