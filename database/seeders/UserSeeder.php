@@ -35,7 +35,7 @@ class UserSeeder extends Seeder
             'zipCode' => '44000',
             'city' => 'Nantes',
             'avatar' => 'no-avatar.png',
-            'email' => 'toto@mail.com',
+            'email' => 'editeur@mail.com',
             'role_id' => 2,
             'password' => Hash::make('Arinfo2023$')
         ]);
@@ -43,12 +43,12 @@ class UserSeeder extends Seeder
         User::create([
             'lastName' => 'Simple',
             'firstName' => 'User',
-            'discord' => 'blabla-prof',
+            'discord' => 'blabla-user',
             'address' => '1-5 rue Emile Masson',
             'zipCode' => '44000',
             'city' => 'Nantes',
             'avatar' => 'no-avatar.png',
-            'email' => 'editeur@mail.com',
+            'email' => 'toto@mail.com',
             'role_id' => 3,
             'password' => Hash::make('Arinfo2023$')
         ]);

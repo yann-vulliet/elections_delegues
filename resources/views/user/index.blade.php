@@ -4,11 +4,11 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <h2>test</h2>
+            <h2>Liste des comptes</h2>
             @foreach ($users as $user)
             @if ($user->role_id == null)
+                <div class="d-flex flex-row flex-wrap color-liste">
                 <hr>
-                <div class="d-flex flex-row flex-wrap">
                     <div class="d-flex flex-column left">
                         <h5>{{ $user->firstName }} {{ $user->lastName }}</h5>
                             <p>{{ $user->email }}</p>
@@ -54,8 +54,8 @@
             @endforeach
             @foreach ($users as $user)
             @if ($user->role_id != null)
+                <div class="d-flex flex-row flex-wrap color-liste">
                 <hr>
-                <div class="d-flex flex-row flex-wrap">
                     <div class="d-flex flex-column left">
                         <h5>{{ $user->firstName }} {{ $user->lastName }}</h5>
                             <p>{{ $user->email }}</p>

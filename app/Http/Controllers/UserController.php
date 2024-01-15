@@ -68,10 +68,12 @@ class UserController extends Controller
         
         if($request->role_id){ //Changement de role sur la page Compte
             $user->role_id = $request->input('role_id');
-        }else if (!$request->vote1 and !$request->vote2 and !$request->show){ //Vote blanc pour le 1er tour
-            $user->vote1 = now();
-        }else if (!$request->vote2 and !$request->show){ //Vote blanc pour le 2ème tour
-            $user->vote2 = now();
+        }else if (!$request->vote1 and !$request->vote2 and !$request->show){ //Vote blanc
+            if ($request->has('vote1') and $request->vote1 == null){
+                $user->vote1 = now();
+            }else if ($request->has('vote2') and $request->vote2 == null){
+                $user->vote2 = now();
+            }
         }else if ($request->vote1 and !$request->show) { //Vote pour le 1er tour
             $oneVote = User::where('id', '=', $request->vote1)->get();
             $result = $oneVote[0]->result1 + 1;

@@ -25,8 +25,7 @@ $total = 0;
             </div>
             @foreach ($roles as $role)
             @if ($role->id >= Auth::user()->role_id)
-                <hr>
-                <div class="d-flex flex-row flex-wrap">
+                <div class="d-flex flex-row flex-wrap color-liste">
                     <div class="d-flex flex-column left">
                         <h5>{{ $role->role }}</h5>
                     </div>  
@@ -46,7 +45,7 @@ $total = 0;
                                                 <input type="hidden" id="" name="role" value="{{$role->id}}" />
                                                 @foreach ($users as $user)
                                                     @if ($user->role_id == $role->id and $user->registeredElection == 0)
-                                                        <div>
+                                                        <div class="color-liste">
                                                             <input type="checkbox" id="registeredElection" name="userId[]" value="{{$user->id}}" />
                                                             <label for="registeredElection">{{$user->firstName}}{{$user->lastName}}</label>
                                                         </div>
@@ -82,7 +81,7 @@ $total = 0;
                                                 <input type="hidden" id="" name="role" value="{{$role->id}}" />
                                                 @foreach ($users as $user)
                                                     @if ($user->role_id == $role->id and $user->registeredElection == 0)
-                                                        <div>
+                                                        <div class="color-liste">
                                                             <input type="checkbox" id="registeredElection" name="userId[]" value="{{$user->id}}" />
                                                             <label for="registeredElection">{{$user->firstName}}{{$user->lastName}}</label>
                                                         </div>
@@ -140,10 +139,12 @@ $total = 0;
                                             </div>
                                             <hr>
                                             @if (isset($finish) and  $finish == true)
-                                            </div>
+                                            <div>
                                                 <input type="hidden" id="" name="winner" value="1000" />
                                                 <button type="submit" class="btn btn-primary">Valider le gagnant</button>
-                                                <?php $finish = false; ?>
+                                            </div>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Valider le gagnant</button>
                                             @else
                                             <div class="d-flex flex-column">
                                                 <div>
@@ -151,12 +152,12 @@ $total = 0;
                                                     <input type="time" id="vote2" name="vote2" value="02:00" max="" />
                                                 </div>
                                             </div>
-                                            <button type="submit" class="btn btn-primary">Démarrer</button>
-                                            @endif
                                         </div>
+                                        <button type="submit" class="btn btn-primary">Démarrer</button>
+                                            @endif
                                     </form>
                                 </div>
-                                <?php $total = 0; ?>
+                                <?php $total = 0; $finish = false; ?>
                             @endif
                             @if ($role->id == $session->role_id and isset($session->vote1) and isset($session->vote2) and strtotime($session->vote2)>$now)
                             <!-- 1er tour terminé, modifier le 2ème vote qui est encore en cours -->
@@ -215,6 +216,7 @@ $total = 0;
                                 <div class="dropdown-menu dropdown-menu-end mb-3 row mb-3">
                                     <div class="mb-3 d-flex">
                                         <div>
+                                            <h5>Résultat final :</h5>
                                             @foreach ($win2 as $user)
                                                 @if ($user->role_id == $role->id and $user->registeredElection == 1)
                                                     <?php $total = $total + $user->result2; ?>
