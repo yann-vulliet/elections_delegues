@@ -14,6 +14,7 @@
                             <form class="" action="{{route('users.update', $user)}}" method="POST" enctype="multipart/form-data">
                                 @csrf
                                 @method('PUT')
+                                <input type="hidden" name="show" value="true">
                                 <div class="mb-3">
                                     <label for="firstName" class="form-label">Prénom</label>
                                     <input type="text" class="form-control" id="firstName" name="firstName" placeholder="{{$user->firstName}}" value="{{$user->firstName}}">

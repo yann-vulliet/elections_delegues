@@ -9,15 +9,15 @@ $total = 0;
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <h2>test</h2>                        
+            <h2>Liste des groupes</h2>                        
             <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                <div class="btn btn-primary">Nouveau Groupe</div>
+                <div class="btn btn-primary">Créer un nouveau groupe</div>
             </a>
             <div class="dropdown-menu dropdown-menu-start mb-8 row mb-8">
                 <form class="" action="{{route('roles.store')}}" method="POST">
                 @csrf
                 <div class="form-group">
-                    <label for="role">Nouveau Groupe</label>
+                    <label for="role">Nom du nouveau groupe : </label>
                     <input class="form-control" type="text" required placeholder="" id="role" name="role" value="">
                 </div>
                     <button type="submit" class="btn btn-primary">Valider</button>
@@ -40,7 +40,7 @@ $total = 0;
                                 <div class="dropdown-menu dropdown-menu-end mb-3 row mb-3">
                                     <form class="" action="{{route('sessions.store')}}" method="POST">
                                         @csrf
-                                        <div class="mb-3 d-flex">
+                                        <div class="mb-3 d-flex flex-column">
                                             <div>
                                                 <h6>Ajouter des candidats</h6>
                                                 <input type="hidden" id="" name="role" value="{{$role->id}}" />
@@ -53,6 +53,7 @@ $total = 0;
                                                     @endif
                                                 @endforeach
                                             </div>
+                                            <hr>
                                             <div class="d-flex flex-column">
                                                 <div>
                                                     <label for="vote1">Temps avant la fin du 1er tour dans : </label>
@@ -75,7 +76,7 @@ $total = 0;
                                     <form class="" action="{{route('sessions.update', $session)}}" method="POST">
                                         @csrf
                                         @method('PUT')
-                                        <div class="mb-3 d-flex">
+                                        <div class="mb-3 d-flex flex-column">
                                             <div>
                                                 <h6>Ajouter des candidats</h6>
                                                 <input type="hidden" id="" name="role" value="{{$role->id}}" />
@@ -88,6 +89,7 @@ $total = 0;
                                                     @endif
                                                 @endforeach
                                             </div>
+                                            <hr>
                                             <div class="d-flex flex-column">
                                                 <div>
                                                     <label for="vote1">Réinitialiser le temps avant la fin du 1er tour :</label>
@@ -109,7 +111,7 @@ $total = 0;
                                     <form class="" action="{{route('sessions.update', $session)}}" method="POST">
                                         @csrf
                                         @method('PUT')
-                                        <div class="mb-3 d-flex">
+                                        <div class="mb-3 d-flex flex-column">
                                             <div>
                                                 <h5>Candidat au 2ème tour :</h5>
                                                 <input type="hidden" id="" name="role" value="{{$role->id}}" />
@@ -136,6 +138,7 @@ $total = 0;
                                                     @endif
                                                 @endforeach
                                             </div>
+                                            <hr>
                                             @if (isset($finish) and  $finish == true)
                                             </div>
                                                 <input type="hidden" id="" name="winner" value="1000" />
@@ -148,9 +151,9 @@ $total = 0;
                                                     <input type="time" id="vote2" name="vote2" value="02:00" max="" />
                                                 </div>
                                             </div>
+                                            <button type="submit" class="btn btn-primary">Démarrer</button>
+                                            @endif
                                         </div>
-                                        <button type="submit" class="btn btn-primary">Démarrer</button>
-                                        @endif
                                     </form>
                                 </div>
                                 <?php $total = 0; ?>
@@ -164,7 +167,7 @@ $total = 0;
                                     <form class="" action="{{route('sessions.update', $session)}}" method="POST">
                                         @csrf
                                         @method('PUT')
-                                        <div class="mb-3 d-flex">
+                                        <div class="mb-3 d-flex flex-column">
                                             <div>
                                                 <h5>Résultat du 1er tour :</h5>
                                                 <input type="hidden" id="" name="role" value="{{$role->id}}" />
@@ -191,6 +194,7 @@ $total = 0;
                                                     @endif
                                                 @endforeach
                                             </div>
+                                            <hr>
                                             <div class="d-flex flex-column">
                                                 <div>
                                                     <label for="vote2">Réinitialiser le temps avant la fin du 2ème tour : </label>

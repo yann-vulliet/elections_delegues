@@ -25,15 +25,15 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
-            'lastName' => fake()->name(),
-            'firstName' => fake()->name(),
-            'discord' => fake()->name(),
+            'lastName' => fake()->lastName(),
+            'firstName' => fake()->firstName(),
+            'discord' => fake()->jobTitle(),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => '$2y$12$Fd79hir3Ce5fQ69YHqdRUu3mII3eTDttr9t6XNCauOyJF3d8umNvS',
-            'address' => fake()->name(),
+            'address' => fake()->streetAddress(),
             'zipCode' => '44123',
-            'city' => fake()->name(),
+            'city' => fake()->city(),
             'role_id' => rand(3, Role::count()),
             'avatar' => 'no-avatar.png'
         ];

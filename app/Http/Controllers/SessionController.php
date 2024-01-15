@@ -118,11 +118,13 @@ class SessionController extends Controller
                 if (isset($winner)){
                     $user = User::where('result1', '!=', 0)
                     ->orderBy('result1', 'desc')
-                    ->take(1)
+                    ->take(2)
                     ->get();
                     $user[0]->result2 = intval($winner);
+                    $user[1]->result2 = intval($winner/2);
                     $session->vote2 = now();
                     $user[0]->save();
+                    $user[1]->save();
                 }else{
                     return redirect()->back('index')->withErrors('erreur', 'Veuillez entrer un temps');
                 }

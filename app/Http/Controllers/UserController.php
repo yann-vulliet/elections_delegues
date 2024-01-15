@@ -65,20 +65,20 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-
+        
         if($request->role_id){ //Changement de role sur la page Compte
             $user->role_id = $request->input('role_id');
-        }else if (!$request->vote1 and !$request->vote2){ //Vote blanc pour le 1er tour
+        }else if (!$request->vote1 and !$request->vote2 and !$request->show){ //Vote blanc pour le 1er tour
             $user->vote1 = now();
-        }else if (!$request->vote2){ //Vote blanc pour le 2ème tour
+        }else if (!$request->vote2 and !$request->show){ //Vote blanc pour le 2ème tour
             $user->vote2 = now();
-        }else if ($request->vote1) { //Vote pour le 1er tour
+        }else if ($request->vote1 and !$request->show) { //Vote pour le 1er tour
             $oneVote = User::where('id', '=', $request->vote1)->get();
             $result = $oneVote[0]->result1 + 1;
             $oneVote[0]->result1 = $result;
             $oneVote[0]->save();
             $user->vote1 = now();
-        }else if ($request->vote2) { //Vote pour le 2ème tour
+        }else if ($request->vote2 and !$request->show) { //Vote pour le 2ème tour
             $oneVote = User::where('id', '=', $request->vote2)->get();
             $result = $oneVote[0]->result2 + 1;
             $oneVote[0]->result2 = $result;
@@ -88,11 +88,9 @@ class UserController extends Controller
             $request->validate([
                 'firstName' => 'required|max:100',
                 'lastName' => 'required|max:100',
-                'discord' => 'required|max:100',
                 'address' => 'required|max:100',
                 'zipCode' => 'required|max:100',
-                'city' => 'required|max:100',
-                'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg'
+                'city' => 'required|max:100'
             ]);
 
             $filename = "";
@@ -103,8 +101,7 @@ class UserController extends Controller
                 $extension = $request->file('avatar')->getClientOriginalExtension();
                 $filename = $filenameWithExt. '_' .time().'.'.$extension;
                 $request->file('avatar')->storeAs('public/image', $filename);
-            } else {
-                $filename = 'no-avatar.png';
+                $user->avatar = $filename;
             }
 
             $user->firstName = $request->input('firstName');
@@ -113,7 +110,6 @@ class UserController extends Controller
             $user->address = $request->input('address');
             $user->zipCode = $request->input('zipCode');
             $user->city = $request->input('city');
-            $user->avatar = $filename;
         }
 
         $user->save();

@@ -26,24 +26,7 @@ class RoleController extends Controller
             $win2 = User::where('result2', '!=', 0)
                 ->where('role_id', '!=', 0)
                 ->orderBy('result2', 'desc')
-                ->get();
-
-            // $win2_2 = '';
-            
-            // if (count($win2) == 1){ // Gagnant dès le 1er tour
-            //     $win2 = $win2[0];
-            //     $win2_2 = $win1[1];
-            // }else if (count($win2) == 0 or $win2[0]->result2 == $win2[1]->result2){ // Égalité au 2ème tour
-            //     $win2 = 'Aucun gagnant, relancer le 2ème tour';
-            // }else if (count($win2) >= 2){ // Gagnant au 2ème tour
-            //     $win2_2 = $win2[1];
-            //     $win2 = $win2[0];
-            // }else if (count($win2) != 0){ // Gagnant au 2ème tour sans suppléant
-            //     $win2 = $win2[0];
-            //     $win2_2 = $win2[1];
-            // }else{
-            // }
-            
+                ->get();            
 
             $sessions = Session::all();
             $roles = Role::orderBy('id', 'desc')->get();
@@ -102,9 +85,21 @@ class RoleController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Role $role)
     {
-        //
+        if (Auth::user() and Auth::user()->role_id <= 2) {
+            $request->validate([
+                'role' => 'required'
+            ]);
+    
+            $role->role = $request->input('role');
+    
+            $role->save();
+            
+            return redirect()->back()->with('message', 'Le groupe a été modifié');
+        } else {
+            return redirect()->back()->withErrors('erreur', 'Vous n\'avez pas les droits administrateurs');
+        }
     }
 
     /**
@@ -113,8 +108,18 @@ class RoleController extends Controller
     public function destroy(Role $role)
     {
         if (Auth::user() and Auth::user()->role_id == 1) {
+            
+            $users = User::where('role_id', '=', $role->id)->get();
+            foreach ($users as $user){
+                $user->role_id = null;
+                $user->vote1 = null;
+                $user->vote2 = null;
+                $user->registeredElection = 0;
+                $user->save();
+            }
+
             $role->delete();
-            return redirect()->back()->with('message', 'Le role a été supprimé définitivement.');
+            return redirect()->back()->with('message', 'Le groupe a été supprimé définitivement.');
         } else {
             return redirect()->back()->withErrors(['erreur' => 'Suppression du role impossible']);
         }

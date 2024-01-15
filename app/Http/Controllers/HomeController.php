@@ -59,8 +59,8 @@ class HomeController extends Controller
         
         if (count($win2) == 1){ // Gagnant dès le 1er tour
             $win2 = $win2[0];
-            if (isset($win1[1])){
-                $win2_2 = $win1[1];
+            if (isset($win1[0])){
+                $win2_2 = $win1[0];
             }else{
             }
         }else if (count($win2) == 0 or $win2[0]->result2 == $win2[1]->result2){ // Égalité au 2ème tour

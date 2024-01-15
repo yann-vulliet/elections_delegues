@@ -20,6 +20,6 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::resource('/users', App\Http\Controllers\UserController::class)->except('create', 'store');
-Route::resource('/roles', App\Http\Controllers\RoleController::class)->except('show');
+Route::resource('/users', App\Http\Controllers\UserController::class)->except('create', 'store', 'edit');
+Route::resource('/roles', App\Http\Controllers\RoleController::class)->except('create', 'show', 'edit');
 Route::resource('/sessions', App\Http\Controllers\SessionController::class)->except('create', 'edit');

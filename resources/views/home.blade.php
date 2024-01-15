@@ -12,8 +12,6 @@
                             {{ session('status') }}
                         </div>
                     @endif
-
-                    {{ __('Identification effectuée') }}
                 </div>
 
                 <ul class="navbar-nav ms-auto">
@@ -25,6 +23,7 @@
                             <form class="" action="{{route('users.update', $user)}}" method="POST" enctype="multipart/form-data">
                                 @csrf
                                 @method('PUT')
+                                <input type="hidden" name="show" value="true">
                                 <div class="mb-3">
                                     <label for="firstName" class="form-label">Prénom</label>
                                     <input type="text" class="form-control" id="firstName" name="firstName" placeholder="{{$user->firstName}}" value="{{$user->firstName}}">
@@ -163,7 +162,7 @@
                                     </div>
                                 </div>
                             </div>
-                        @elseif ($session->role_id == $user->role_id and $session->vote2<now()) <!-- Résultat du 2ème tour -->
+                        @elseif ($session->role_id == $user->role_id and isset($session->vote2) and $session->vote2<now()) <!-- Résultat du 2ème tour -->
                             <h2>{{$user->role->role}}</h2>
                             <div class="center">
                                 <div>
@@ -174,6 +173,7 @@
                                     </div>
                                 </div>
                             </div>
+                        @else
                         @endif
                     @endforeach
                 </div>

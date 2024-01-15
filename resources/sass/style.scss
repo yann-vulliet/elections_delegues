@@ -1,11 +1,33 @@
 // Correction BootStrap
 
+:root {
+    --bs-body-font-family: $font-family-sans-serif;
+}
+
 .dropdown-toggle::after {
     font-size: 0;
 }
 
 .dropdown-menu {
     --bs-dropdown-min-width: 30rem;
+}
+
+.alert {
+    position: absolute;
+    margin: -40px auto;
+    padding: 10px;
+    left: calc(50% - 240px);
+    width: 480px;
+}
+
+.card {
+    margin: 10px auto;
+    padding: 10px;
+    border: none;
+}
+
+.navbar-nav.ms-auto .nav-item.dropdown #navbarDropdown {
+    display: none;
 }
 
 // Style
@@ -16,6 +38,14 @@
 
 .max-content {
     width: max-content;
+}
+
+.card img {
+    margin: 10px;
+    height: 384px;
+    width: 384px;
+    object-fit: cover;
+    border-radius: 50%;
 }
 
 .btn-admin {
